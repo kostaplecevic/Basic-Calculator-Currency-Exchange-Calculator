@@ -21,9 +21,13 @@ class HoverButton(Button):
 def raise_frame(frame_number):
     if frame_number == "Currency":
         root.geometry("309x350+400+175")
+        root.title("Currency Converter")
+        root.iconbitmap("Designcontest-Ecommerce-Business-Dollar.ico")
         currency_frame.tkraise()
     elif frame_number == "Simple":
         root.geometry("309x330+400+175")
+        root.title("Simple Calc")
+        root.iconbitmap("Guillendesign-Variations-1-Calculator-3.ico")
         simple_frame.tkraise()
 
 today = date.today()
@@ -246,7 +250,20 @@ choices = {
     "Chinese Yuan":         'CNY',
     "Russian Rouble":       'RUB',
     "Japanese Yen":         'JPY',
-    "Indian Rupee":         'INR'
+    "Indian Rupee":         'INR',
+    "Bulgarian Lev":        'BGN',
+    "Czech Koruna":         'CZK',
+    "Swedish Krona":        'SEK',
+    "Croatian Kuna":        'HRK',
+    "Turkish Lira":         'TRY',
+    "Australian Dollar":    'AUD',
+    "Canadian Dollar":      'CAD',
+    "Brazilian Real":       'BRL',
+    "Hong Kong Dollar":     'HKD',
+    "Israeli Shekel":       'ILS',
+    "South Korean Won":     'KRW',
+    "Singapore Dollar":     'SGD',
+    "South African Rand":   'ZAR'
 }
 
 clicked = StringVar()
@@ -262,14 +279,14 @@ def get_time():
 
 # Manus and entries for currency_frame
 
-e = Entry(currency_frame, width=6, borderwidth=5, font=("Helvetica", 15), bg="#a49b9b", justify=RIGHT, relief=SUNKEN, insertbackground="#a49b9b")
-e.grid(row=1,column=0,columnspan=2,padx=1,pady=10,sticky=W+E)
+e_currency = Entry(currency_frame, width=6, borderwidth=5, font=("Helvetica", 15), bg="#a49b9b", justify=RIGHT, relief=SUNKEN, insertbackground="#a49b9b")
+e_currency.grid(row=1,column=0,columnspan=2,padx=1,pady=10,sticky=W+E)
 
 drop = OptionMenu(currency_frame, clicked, *choices)
 drop.grid(row=1,column=2,columnspan=4,padx=11,pady=10,sticky=W+E)
 
-e2 = Entry(currency_frame, width=6, borderwidth=5, font=("Helvetica", 15), bg="#a49b9b", justify=RIGHT, relief=SUNKEN, insertbackground="#a49b9b")
-e2.grid(row=2,column=0,columnspan=2,padx=1,pady=10,sticky=W+E)
+e2_currency = Entry(currency_frame, width=6, borderwidth=5, font=("Helvetica", 15), bg="#a49b9b", justify=RIGHT, relief=SUNKEN, insertbackground="#a49b9b")
+e2_currency.grid(row=2,column=0,columnspan=2,padx=1,pady=10,sticky=W+E)
 
 drop2 = OptionMenu(currency_frame, clicked2, *choices)
 drop2.grid(row=2,column=2,columnspan=4,padx=11,pady=10,sticky=W+E)
@@ -299,46 +316,47 @@ def update():
 
     current_time_label = Label(currency_frame, text=get_time(), background='#837e7e', fg="white", font=("Helvetica", 10))
     current_time_label.grid(row=5, column=0, columnspan=3, sticky=E)
-    if e.get() != '':
-        number = e.get()
+    if e_currency.get() != '':
+        number = e_currency.get()
         number = float(number)
         result = number * rate
         result = round(result, 3)
-        e2.delete(0, END)
-        e2.insert(0, str(result))
+        e2_currency.delete(0, END)
+        e2_currency.insert(0, str(result))
 
-def button_click(number):  # Chooses a number, gets the rates, converts and writes out the result
-    current = e.get()
-    e.delete(0, END)
-    e.insert(0, str(current) + str(number))
+def button_click_currency(number):  # Chooses a number, gets the rates, converts and writes out the result
+    current = e_currency.get()
+    e_currency.delete(0, END)
+    e_currency.insert(0, str(current) + str(number))
 
-    number = e.get()
+    number = e_currency.get()
     number = float(number)
     result = number * rate
     result = round(result, 3)
-    e2.delete(0, END)
-    e2.insert(0, str(result))
+    e2_currency.delete(0, END)
+    e2_currency.insert(0, str(result))
 
 def button_clear():
-    e.delete(0, END)
-    e2.delete(0 , END)
+    e_currency.delete(0, END)
+    e2_currency.delete(0 , END)
 
 def button_dot():
-    string = e.get()
-    e.delete(0, END)
+    string = e_currency.get()
+    e_currency.delete(0, END)
     string = string+"."
-    e.insert(END, string)
+    e_currency.insert(END, string)
 
 def backspace():
-    e_lenght = len(e.get()) - 1
-    e.delete(e_lenght, END)
+    if e_currency.get() != '':
+        e_currency_lenght = len(e_currency.get()) - 1
+        e_currency.delete(e_currency_lenght, END)
 
-    number = e.get()
-    number = float(number)
-    result = number*rate
-    result = round(result, 3)
-    e2.delete(0, END)
-    e2.insert(0, str(result))
+        number = e_currency.get()
+        number = float(number)
+        result = number*rate
+        result = round(result, 3)
+        e2_currency.delete(0, END)
+        e2_currency.insert(0, str(result))
 
 current_rate_label = Label(currency_frame, text="", background='#837e7e', fg="white", font=("Helvetica", 10))
 current_rate_label.grid(row=4, column=0, columnspan=3, sticky=W)
@@ -354,43 +372,43 @@ current_time_label.grid(row=5, column=0, columnspan=3, sticky=E)
 update_button = HoverButton(currency_frame, text="Update rates", command=lambda: update(), activebackground='#837e7e', background='#837e7e',activeforeground="white", fg="white", borderwidth= 0, font=("Helvetica", 10, "bold", "underline"))
 update_button.grid(row=6,column=0, pady=4)
 
-button_clear = HoverButton(currency_frame, text="C", width=10, padx= 10, command=button_clear, activebackground='#989393', background="#6d6565", fg="white")
-button_backspace = HoverButton(currency_frame, text="DEL", width=10, padx= 10, command=backspace, activebackground='#989393', background="#6d6565", fg="white")
+button_clear_currency = HoverButton(currency_frame, text="C", width=10, padx= 10, command=button_clear, activebackground='#989393', background="#6d6565", fg="white")
+button_backspace_currency = HoverButton(currency_frame, text="DEL", width=10, padx= 10, command=backspace, activebackground='#989393', background="#6d6565", fg="white")
 
-button_7 = HoverButton(currency_frame, text="7",width=11, padx= 10, command=lambda: button_click(7), activebackground='#504e4e', background='#252323', fg="white")
-button_8 = HoverButton(currency_frame, text="8",width=10, padx= 10, command=lambda: button_click(8), activebackground='#504e4e', background='#252323', fg="white")
-button_9 = HoverButton(currency_frame, text="9",width=10, padx= 10, command=lambda: button_click(9), activebackground='#504e4e', background='#252323', fg="white")
+button_7_currency = HoverButton(currency_frame, text="7",width=11, padx= 10, command=lambda: button_click_currency(7), activebackground='#504e4e', background='#252323', fg="white")
+button_8_currency = HoverButton(currency_frame, text="8",width=10, padx= 10, command=lambda: button_click_currency(8), activebackground='#504e4e', background='#252323', fg="white")
+button_9_currency = HoverButton(currency_frame, text="9",width=10, padx= 10, command=lambda: button_click_currency(9), activebackground='#504e4e', background='#252323', fg="white")
 
-button_4 = HoverButton(currency_frame, text="4",width=11, padx= 10, command=lambda: button_click(4), activebackground='#504e4e', background='#252323', fg="white")
-button_5 = HoverButton(currency_frame, text="5",width=10, padx= 10, command=lambda: button_click(5), activebackground='#504e4e', background='#252323', fg="white")
-button_6 = HoverButton(currency_frame, text="6",width=10, padx= 10, command=lambda: button_click(6), activebackground='#504e4e', background='#252323', fg="white")
+button_4_currency = HoverButton(currency_frame, text="4",width=11, padx= 10, command=lambda: button_click_currency(4), activebackground='#504e4e', background='#252323', fg="white")
+button_5_currency = HoverButton(currency_frame, text="5",width=10, padx= 10, command=lambda: button_click_currency(5), activebackground='#504e4e', background='#252323', fg="white")
+button_6_currency = HoverButton(currency_frame, text="6",width=10, padx= 10, command=lambda: button_click_currency(6), activebackground='#504e4e', background='#252323', fg="white")
 
-button_1 = HoverButton(currency_frame, text="1",width=11, padx= 10, command=lambda: button_click(1), activebackground='#504e4e', background='#252323', fg="white")
-button_2 = HoverButton(currency_frame, text="2",width=10, padx= 10, command=lambda: button_click(2), activebackground='#504e4e', background='#252323', fg="white")
-button_3 = HoverButton(currency_frame, text="3",width=10, padx= 10, command=lambda: button_click(3), activebackground='#504e4e', background='#252323', fg="white")
+button_1_currency = HoverButton(currency_frame, text="1",width=11, padx= 10, command=lambda: button_click_currency(1), activebackground='#504e4e', background='#252323', fg="white")
+button_2_currency = HoverButton(currency_frame, text="2",width=10, padx= 10, command=lambda: button_click_currency(2), activebackground='#504e4e', background='#252323', fg="white")
+button_3_currency = HoverButton(currency_frame, text="3",width=10, padx= 10, command=lambda: button_click_currency(3), activebackground='#504e4e', background='#252323', fg="white")
 
-button_0 = HoverButton(currency_frame,text="0", width=10, padx= 10, command=lambda: button_click(0), activebackground='#504e4e', background='#252323', fg="white")
-button_dot = HoverButton(currency_frame, text=".", width=10, padx= 10, command=button_dot, activebackground='#989393', background="#6d6565", fg="white")
+button_0_currency = HoverButton(currency_frame,text="0", width=10, padx= 10, command=lambda: button_click_currency(0), activebackground='#504e4e', background='#252323', fg="white")
+button_dot_currency = HoverButton(currency_frame, text=".", width=10, padx= 10, command=button_dot, activebackground='#989393', background="#6d6565", fg="white")
 
 # Put currency_frame buttons on screen
 
-button_clear.grid(row=7, column=2, columnspan=2)
-button_backspace.grid(row=7, column=4, columnspan=2)
+button_clear_currency.grid(row=7, column=2, columnspan=2)
+button_backspace_currency.grid(row=7, column=4, columnspan=2)
 
-button_7.grid(row=8,column=0, columnspan=1)
-button_8.grid(row=8,column=2, columnspan=2)
-button_9.grid(row=8,column=4, columnspan=2)
+button_7_currency.grid(row=8,column=0, columnspan=1)
+button_8_currency.grid(row=8,column=2, columnspan=2)
+button_9_currency.grid(row=8,column=4, columnspan=2)
 
-button_4.grid(row=9,column=0, columnspan=1)
-button_5.grid(row=9,column=2, columnspan=2)
-button_6.grid(row=9,column=4, columnspan=2)
+button_4_currency.grid(row=9,column=0, columnspan=1)
+button_5_currency.grid(row=9,column=2, columnspan=2)
+button_6_currency.grid(row=9,column=4, columnspan=2)
 
-button_1.grid(row=10, column=0, columnspan=1)
-button_2.grid(row=10, column=2, columnspan=2)
-button_3.grid(row=10, column=4, columnspan=2)
+button_1_currency.grid(row=10, column=0, columnspan=1)
+button_2_currency.grid(row=10, column=2, columnspan=2)
+button_3_currency.grid(row=10, column=4, columnspan=2)
 
-button_0.grid(row=11, column=2, columnspan=2)
-button_dot.grid(row=11, column=4, columnspan=2)
+button_0_currency.grid(row=11, column=2, columnspan=2)
+button_dot_currency.grid(row=11, column=4, columnspan=2)
 
 
 root.mainloop()
