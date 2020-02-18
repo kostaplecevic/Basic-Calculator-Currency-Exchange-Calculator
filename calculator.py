@@ -60,19 +60,19 @@ choices = {
 }
 change = StringVar(root)
 change.set("Simple")
-dropdownMenu = OptionMenu(simple_frame, change, *choices)
+dropdownMenu = OptionMenu(simple_frame, change, *choices, command=raise_frame)
 dropdownMenu.config(width=10)
 dropdownMenu.grid(row=0, column=2,columnspan=2, sticky="W")
 
-button_change = HoverButton(simple_frame, text="Change", command=lambda: raise_frame(change.get()))
-button_change.grid(row=0,column=3, sticky="E")
+#button_change = HoverButton(simple_frame, text="Change", command=lambda: raise_frame(change.get()))
+#button_change.grid(row=0,column=3, sticky="E")
 
-dropdownMenu2 = OptionMenu(currency_frame, change, *choices)
+dropdownMenu2 = OptionMenu(currency_frame, change, *choices, command=raise_frame)
 dropdownMenu2.config(width=10)
-dropdownMenu2.grid(row=0, column=0, sticky="E")
+dropdownMenu2.grid(row=0, column=2, sticky="E")
 
-button_change2 = HoverButton(currency_frame, text="Change", command=lambda: raise_frame(change.get()))
-button_change2.grid(row=0,column=2, sticky="E")
+#button_change2 = HoverButton(currency_frame, text="Change", command=lambda: raise_frame(change.get()))
+#button_change2.grid(row=0,column=3, sticky="W")
 
 
 #Defining simple_frame button functions
@@ -94,17 +94,17 @@ def button_equal():
             result = int(result)
         e.insert(0,result)
     if math=="subtraction":
-        result = f_num - int(second_number)
+        result = f_num - float(second_number)
         if result % 1 == 0:
             result = int(result)
         e.insert(0, result)
     if math=="multiplication":
-        result = f_num * int(second_number)
+        result = f_num * float(second_number)
         if result % 1 == 0:
             result = int(result)
         e.insert(0, result)
     if math=="division":
-        result = f_num / int(second_number)
+        result = f_num / float(second_number)
         if result % 1 == 0:
             result = int(result)
         e.insert(0, result)
@@ -114,7 +114,7 @@ def button_equal():
             result = int(result)
         e.insert(0, result)
     if math=="squared":
-        second_number = int(second_number)
+        second_number = float(second_number)
         result = 1
         counter = second_number
         while counter !=0:
@@ -181,7 +181,10 @@ def button_dot():
 def button_plusminus():
     value = e.get()
     e.delete(0, END)
-    value = float(value) * -1
+    if float(value) % 1 == 0:
+        value = int(value) * -1
+    else:
+        value = round(float(value) * -1, 2)
     e.insert(0, str(value))
 
 
